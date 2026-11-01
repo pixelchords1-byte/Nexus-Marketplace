@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Marketplace - Buy & Sell Anything</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        accent: {
+                            50: 'var(--accent-50)',
+                            100: 'var(--accent-100)',
+                            500: 'var(--accent-500)',
+                            600: 'var(--accent-600)',
+                            700: 'var(--accent-700)',
+                        },
+                        bgMain: 'var(--bg-main)',
+                        bgCard: 'var(--bg-card)',
+                        bgBorder: 'var(--bg-border)',
+                        textMain: 'var(--text-main)',
+                        textMuted: 'var(--text-muted)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Theme Variables */
+        :root[data-theme="light"] {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-border: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent-50: #eff6ff;
+            --accent-100: #dbeafe;
+            --accent-500: #2563eb;
+            --accent-600: #1d4ed8;
+            --accent-700: #1e40af;
+        }
+
+        :root[data-theme="dark"] {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-50: #1e293b;
+            --accent-100: #334155;
+            --accent-500: #3b82f6;
+            --accent-600: #2563eb;
+            --accent-700: #1d4ed8;
+        }
+
+        :root[data-theme="cyberpunk"] {
+            --bg-main: #0a051b;
+            --bg-card: #150d2a;
+            --bg-border: #ff007f;
+            --text-main: #00f0ff;
+            --text-muted: #d946ef;
+            --accent-50: #2b0938;
+            --accent-100: #500f68;
+            --accent-500: #ff007f;
+            --accent-600: #d9006c;
+            --accent-700: #a30052;
+        }
+
+        :root[data-theme="sunset"] {
+            --bg-main: #1f1216;
+            --bg-card: #2e1a20;
+            --bg-border: #4a2831;
+            --text-main: #fff1f2;
+            --text-muted: #f43f5e;
+            --accent-50: #391922;
+            --accent-100: #5c2230;
+            --accent-500: #f97316;
+            --accent-600: #ea580c;
+            --accent-700: #c2410c;
+        }
+
+        :root[data-theme="minimalist"] {
+            --bg-main: #121212;
+            --bg-card: #1e1e1e;
+            --bg-border: #2c2c2c;
+            --text-main: #e0e0e0;
+            --text-muted: #888888;
+            --accent-50: #252525;
+            --accent-100: #333333;
+            --accent-500: #10b981;
+            --accent-600: #059669;
+            --accent-700: #047857;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-border);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-500);
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .card-element {
+            background-color: var(--bg-card);
+            border-color: var(--bg-border);
+        }
+
+        .glow-accent {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+        [data-theme="cyberpunk"] .glow-accent {
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
+        }
+
+        /* Glassmorphism elements */
+        .glass-header {
+            background-color: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+        }
+        [data-theme="light"] .glass-header {
+            background-color: rgba(248, 250, 252, 0.85);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans text-base transition-all">
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-gradient-to-r from-accent-600 to-indigo-700 text-white text-xs font-semibold py-2 px-4 text-center tracking-wide flex justify-between items-center">
+        <span class="w-full">🚀 Welcome to Nexus Marketplace: Buy & Sell Pre-Owned Tech, Collectibles, Fashion & More!</span>
+        <button onclick="this.parentElement.remove()" class="text-white hover:text-gray-200 ml-2"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <!-- MAIN NAVBAR -->
+    <header class="sticky top-0 z-40 glass-header border-b border-bgBorder transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-4">
+                
+                <!-- Logo & Brand -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="resetFilters()">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-accent-500 to-purple-600 flex items-center justify-center text-white text-xl font-black shadow-lg">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold tracking-tight text-textMain flex items-center gap-1">
+                            NEXUS <span class="text-accent-500 text-xs uppercase px-2 py-0.5 rounded-md bg-accent-500/10 border border-accent-500/30">Market</span>
+                        </span>
+                        <p class="text-[10px] text-textMuted leading-none hidden sm:block">Peer-to-Peer Recommerce</p>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="flex-1 max-w-xl mx-2 sm:mx-4">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-textMuted"></i>
+                        <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search electronics, vintage gear, shoes, collectibles..." 
+                            class="w-full pl-11 pr-4 py-2.5 rounded-full bg-bgMain border border-bgBorder text-textMain placeholder-textMuted focus:outline-none focus:ring-2 focus:ring-accent-500 transition-all text-sm">
+                    </div>
+                </div>
+
+                <!-- Right Action Buttons -->
+                <div class="flex items-center gap-2 sm:gap-4">
+                    
+                    <!-- Design Settings Toggle -->
+                    <button onclick="openModal('settingsModal')" class="p-2.5 rounded-full hover:bg-bgBorder/50 text-textMuted hover:text-textMain transition-all" title="Customize Theme & Layout">
+                        <i class="fa-solid fa-palette text-lg"></i>
+                    </button>
+
+                    <!-- Sell Item Button -->
+                    <button onclick="openModal('sellModal')" class="hidden sm:flex items-center gap-2 bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 text-white px-4 py-2.5 rounded-full font-semibold text-sm shadow-md transition-all hover:scale-[1.02] active:scale-95">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <span>Sell Item</span>
+                    </button>
+
+                    <!-- Cart Icon with Badge -->
+                    <button onclick="toggleCartDrawer()" class="relative p-2.5 rounded-full hover:bg-bgBorder/50 text-textMain transition-all" title="Shopping Cart">
+                        <i class="fa-solid fa-cart-shopping text-xl"></i>
+                        <span id="cartBadge" class="absolute top-1 right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-bgCard transform scale-0 transition-transform">0</span>
+                    </button>
+
+                    <!-- User Profile Avatar Placeholder -->
+                    <div class="w-9 h-9 rounded-full bg-accent-500/20 border border-accent-500/40 flex items-center justify-center text-accent-500 font-bold text-sm cursor-pointer" title="User Account">
+                        JD
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CATEGORIES BAR -->
+        <div class="border-t border-bgBorder/50 bg-bgCard/30 overflow-x-auto no-scrollbar">
+            <div class="max-w-7xl mx-auto px-4 flex items-center gap-2 py-2 text-xs font-medium whitespace-nowrap">
+                <button onclick="filterCategory('All')" class="category-btn active px-3 py-1.5 rounded-full border border-accent-500 bg-accent-500 text-white transition-all">
+                    <i class="fa-solid fa-border-all mr-1"></i> All Items
+                </button>
+                <button onclick="filterCategory('Electronics')" class="category-btn px-3 py-1.5 rounded-full border border-bgBorder text-textMuted hover:border-accent-500 hover:text-textMain transition-all">
+                    <i class="fa-solid fa-laptop mr-1"></i> Electronics
+                </button>
+                <button onclick="filterCategory('Gaming')" class="category-btn px-3 py-1.5 rounded-full border border-bgBorder text-textMuted hover:border-accent-500 hover:text-textMain transition-all">
+                    <i class="fa-solid fa-gamepad mr-1"></i> Gaming Gear
+                </button>
+                <button onclick="filterCategory('Fashion')" class="category-btn px-3 py-1.5 rounded-full border border-bgBorder text-textMuted hover:border-accent-500 hover:text-textMain transition-all">
+                    <i class="fa-solid fa-shirt mr-1"></i> Apparel & Shoes
+                </button>
+                <button onclick="filterCategory('Home')" class="category-btn px-3 py-1.5 rounded-full border border-bgBorder text-textMuted hover:border-accent-500 hover:text-textMain transition-all">
+                    <i class="fa-solid fa-house-laptop mr-1"></i> Home & Living
+                </button>
+                <button onclick="filterCategory('Books')" class="category-btn px-3 py-1.5 rounded-full border border-bgBorder text-textMuted hover:border-accent-500 hover:text-textMain transition-all">
+                    <i class="fa-solid fa-book-bookmark mr-1"></i> Books & Media
+                </button>
+                <button onclick="filterCategory('Collectibles')" class="category-btn px-3 py-1.5 rounded-full border border-bgBorder text-textMuted hover:border-accent-500 hover:text-textMain transition-all">
+                    <i class="fa-solid fa-gem mr-1"></i> Collectibles
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE SELL BUTTON (Floating Bottom) -->
+    <div class="fixed bottom-6 right-6 z-30 sm:hidden">
+        <button onclick="openModal('sellModal')" class="w-14 h-14 bg-accent-500 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl active:scale-95">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+
+    <!-- HERO / BANNER SECTION -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-accent-700 via-purple-800 to-indigo-900 p-8 sm:p-12 text-white shadow-2xl border border-white/10">
+            <div class="relative z-10 max-w-xl">
+                <span class="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-semibold mb-4 border border-white/30">
+                    ✨ Safe, Verified & Instant Peer-to-Peer Deals
+                </span>
+                <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight mb-4">
+                    Turn Unused Gear into Cash.
+                </h1>
+                <p class="text-white/80 text-sm sm:text-base mb-6">
+                    Join thousands of buyers and sellers trading pre-loved electronics, fashion, collectibles, and home decor effortlessly.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <button onclick="openModal('sellModal')" class="bg-white text-gray-900 hover:bg-gray-100 font-bold px-6 py-3 rounded-full text-sm transition-all shadow-lg hover:scale-105">
+                        List an Item Now
+                    </button>
+                    <a href="#marketplaceGrid" class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 font-semibold px-6 py-3 rounded-full text-sm transition-all">
+                        Browse Marketplace
+                    </a>
+                </div>
+            </div>
+            <!-- Decorative Graphics -->
+            <div class="absolute -right-10 -bottom-10 opacity-20 pointer-events-none">
+                <i class="fa-solid fa-bag-shopping text-[240px]"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN MARKETPLACE CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+        
+        <!-- CONTROL TOOLBAR: Filters & Sorting -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-4 border-b border-bgBorder">
+            <div>
+                <h2 class="text-2xl font-bold tracking-tight text-textMain" id="sectionTitle">Featured Marketplace Listings</h2>
+                <p class="text-xs text-textMuted mt-1" id="itemCountDisplay">Showing all available listings</p>
+            </div>
+
+            <!-- Filter Controls -->
+            <div class="flex flex-wrap items-center gap-3 text-sm">
+                
+                <!-- Condition Filter Dropdown -->
+                <select id="conditionFilter" onchange="applyFilters()" class="bg-bgCard border border-bgBorder text-textMain text-xs rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-500">
+                    <option value="All">All Conditions</option>
+                    <option value="Like New">Like New</option>
+                    <option value="Good">Good</option>
+                    <option value="Fair">Fair</option>
+                </select>
+
+                <!-- Max Price Slider -->
+                <div class="flex items-center gap-2 bg-bgCard border border-bgBorder px-3 py-1.5 rounded-xl text-xs">
+                    <span class="text-textMuted">Max Price:</span>
+                    <input type="range" id="priceRange" min="10" max="2500" step="25" value="2500" oninput="updatePriceLabel(this.value)" onchange="applyFilters()" class="w-24 accent-accent-500 cursor-pointer">
+                    <span id="priceValue" class="font-bold text-textMain">$2500</span>
+                </div>
+
+                <!-- Sorting Dropdown -->
+                <select id="sortBy" onchange="applyFilters()" class="bg-bgCard border border-bgBorder text-textMain text-xs rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent-500">
+                    <option value="newest">Sort by: Newest First</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="popular">Most Popular</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- PRODUCT LISTINGS GRID -->
+        <div id="marketplaceGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 transition-all">
+            <!-- Dynamic JavaScript Content Will Render Here -->
+        </div>
+
+        <!-- EMPTY STATE IF NO ITEMS MATCH -->
+        <div id="emptyState" class="hidden text-center py-16">
+            <div class="w-20 h-20 mx-auto rounded-full bg-bgBorder/40 flex items-center justify-center text-textMuted text-3xl mb-4">
+                <i class="fa-solid fa-box-open"></i>
+            </div>
+            <h3 class="text-xl font-bold text-textMain mb-1">No items found</h3>
+            <p class="text-sm text-textMuted mb-6">Try adjusting your filters, category selection, or search query.</p>
+            <button onclick="resetFilters()" class="bg-accent-500 hover:bg-accent-600 text-white font-semibold px-5 py-2.5 rounded-full text-sm">
+                Reset All Filters
+            </button>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-bgBorder bg-bgCard mt-16 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-8 h-8 rounded-lg bg-accent-500 flex items-center justify-center text-white font-black text-sm">N</div>
+                        <span class="text-lg font-bold text-textMain">Nexus Marketplace</span>
+                    </div>
+                    <p class="text-xs text-textMuted leading-relaxed">
+                        The ultimate destination to buy and sell pre-owned tech, collectibles, streetwear, and home goods securely.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold text-textMain uppercase tracking-wider mb-3">Marketplace</h4>
+                    <ul class="text-xs text-textMuted space-y-2">
+                        <li><a href="#" class="hover:text-accent-500 transition-colors">Electronics & Tech</a></li>
+                        <li><a href="#" class="hover:text-accent-500 transition-colors">Gaming Hardware</a></li>
+                        <li><a href="#" class="hover:text-accent-500 transition-colors">Fashion & Apparel</a></li>
+                        <li><a href="#" class="hover:text-accent-500 transition-colors">Buyer Protection</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold text-textMain uppercase tracking-wider mb-3">Accepted Payments</h4>
+                    <div class="flex flex-wrap gap-2 text-xl text-textMuted">
+                        <i class="fa-brands fa-apple" title="Apple Pay"></i>
+                        <i class="fa-brands fa-google-pay" title="Google Pay"></i>
+                        <i class="fa-brands fa-cc-visa" title="Visa"></i>
+                        <i class="fa-brands fa-cc-mastercard" title="Mastercard"></i>
+                        <i class="fa-brands fa-cc-amex" title="American Express"></i>
+                        <i class="fa-brands fa-cc-paypal" title="PayPal"></i>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold text-textMain uppercase tracking-wider mb-3">Stay Connected</h4>
+                    <div class="flex gap-3 text-textMuted">
+                        <a href="#" class="w-8 h-8 rounded-full border border-bgBorder flex items-center justify-center hover:border-accent-500 hover:text-accent-500 transition-all"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full border border-bgBorder flex items-center justify-center hover:border-accent-500 hover:text-accent-500 transition-all"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full border border-bgBorder flex items-center justify-center hover:border-accent-500 hover:text-accent-500 transition-all"><i class="fa-brands fa-discord"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-bgBorder pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-textMuted gap-4">
+                <p>&copy; 2026 Nexus Marketplace Inc. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:underline">Privacy Policy</a>
+                    <a href="#" class="hover:underline">Terms of Service</a>
+                    <a href="#" class="hover:underline">Trust & Safety</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: SELL ITEM MODAL -->
+    <div id="sellModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-bgCard border border-bgBorder rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('sellModal')" class="absolute top-5 right-5 text-textMuted hover:text-textMain text-lg"><i class="fa-solid fa-xmark"></i></button>
+            
+            <div class="mb-6">
+                <h3 class="text-2xl font-bold text-textMain flex items-center gap-2">
+                    <i class="fa-solid fa-tags text-accent-500"></i> List Item for Sale
+                </h3>
+                <p class="text-xs text-textMuted mt-1">Provide accurate details so buyers can find your item quickly.</p>
+            </div>
+
+            <form id="sellItemForm" onsubmit="handleSellSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-textMain uppercase mb-1">Item Title *</label>
+                    <input type="text" id="sellTitle" required placeholder="e.g. Sony WH-1000XM4 Headphones" class="w-full px-4 py-2.5 rounded-xl bg-bgMain border border-bgBorder text-textMain text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-textMain uppercase mb-1">Category *</label>
+                        <select id="sellCategory" required class="w-full px-4 py-2.5 rounded-xl bg-bgMain border border-bgBorder text-textMain text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                            <option value="Electronics">Electronics</option>
+                            <option value="Gaming">Gaming Gear</option>
+                            <option value="Fashion">Fashion & Apparel</option>
+                            <option value="Home">Home & Living</option>
+                            <option value="Books">Books & Media</option>
+                            <option value="Collectibles">Collectibles</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-textMain uppercase mb-1">Condition *</label>
+                        <select id="sellCondition" required class="w-full px-4 py-2.5 rounded-xl bg-bgMain border border-bgBorder text-textMain text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                            <option value="Like New">Like New</option>
+                            <option value="Good">Good</option>
+                            <option value="Fair">Fair</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-textMain uppercase mb-1">Price ($ USD) *</label>
+                        <input type="number" id="sellPrice" min="1" step="0.01" required placeholder="99.99" class="w-full px-4 py-2.5 rounded-xl bg-bgMain border border-bgBorder text-textMain text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-textMain uppercase mb-1">Seller Handle</label>
+                        <input type="text" id="sellSeller" placeholder="@username" class="w-full px-4 py-2.5 rounded-xl bg-bgMain border border-bgBorder text-textMain text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-textMain uppercase mb-1">Image URL</label>
+                    <input type="url" id="sellImage" placeholder="https://images.unsplash.com/..." class="w-full px-4 py-2.5 rounded-xl bg-bgMain border border-bgBorder text-textMain text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                    <p class="text-[10px] text-textMuted mt-1">Leave blank for an automatic high-quality category preset image.</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-textMain uppercase mb-1">Description *</label>
+                    <textarea id="sellDescription" rows="3" required placeholder="Describe item condition, inclusions, specs..." class="w-full px-4 py-2.5 rounded-xl bg-bgMain border border-bgBorder text-textMain text-sm focus:ring-2 focus:ring-accent-500 focus:outline-none"></textarea>
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-accent-500 hover:bg-accent-600 text-white font-bold py-3 rounded-xl shadow-lg transition-all">
+                        Publish Listing
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: CUSTOMIZABLE DESIGN & THEME SETTINGS -->
+    <div id="settingsModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-bgCard border border-bgBorder rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
+            <button onclick="closeModal('settingsModal')" class="absolute top-5 right-5 text-textMuted hover:text-textMain text-lg"><i class="fa-solid fa-xmark"></i></button>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold text-textMain flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-accent-500"></i> Design & UI Settings
+                </h3>
+                <p class="text-xs text-textMuted mt-1">Customize visual themes, layout density, and primary accents.</p>
+            </div>
+
+            <div class="space-y-5 text-sm">
+                <!-- Theme Presets -->
+                <div>
+                    <label class="block text-xs font-bold text-textMain uppercase mb-2">Color Theme Preset</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="setTheme('dark')" class="theme-option-btn border border-bgBorder p-3 rounded-xl text-left flex items-center gap-2 hover:border-accent-500">
+                            <span class="w-4 h-4 rounded-full bg-slate-900 border"></span> Dark Mode
+                        </button>
+                        <button onclick="setTheme('light')" class="theme-option-btn border border-bgBorder p-3 rounded-xl text-left flex items-center gap-2 hover:border-accent-500">
+                            <span class="w-4 h-4 rounded-full bg-slate-100 border border-gray-400"></span> Light Mode
+                        </button>
+                        <button onclick="setTheme('cyberpunk')" class="theme-option-btn border border-bgBorder p-3 rounded-xl text-left flex items-center gap-2 hover:border-accent-500">
+                            <span class="w-4 h-4 rounded-full bg-pink-600"></span> Neon Cyberpunk
+                        </button>
+                        <button onclick="setTheme('sunset')" class="theme-option-btn border border-bgBorder p-3 rounded-xl text-left flex items-center gap-2 hover:border-accent-500">
+                            <span class="w-4 h-4 rounded-full bg-orange-600"></span> Sunset Orange
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Font Size Selector -->
+                <div>
+                    <label class="block text-xs font-bold text-textMain uppercase mb-2">Typography Size</label>
+                    <div class="flex gap-2 bg-bgMain p-1 rounded-xl border border-bgBorder">
+                        <button onclick="setFontSize('sm')" class="font-btn flex-1 py-1.5 rounded-lg text-xs font-medium hover:bg-bgCard">Compact</button>
+                        <button onclick="setFontSize('base')" class="font-btn active flex-1 py-1.5 rounded-lg text-xs font-medium bg-accent-500 text-white">Default</button>
+                        <button onclick="setFontSize('lg')" class="font-btn flex-1 py-1.5 rounded-lg text-xs font-medium hover:bg-bgCard">Large</button>
+                    </div>
+                </div>
+
+                <!-- Grid Density -->
+                <div>
+                    <label class="block text-xs font-bold text-textMain uppercase mb-2">Grid Layout Density</label>
+                    <div class="flex gap-2 bg-bgMain p-1 rounded-xl border border-bgBorder">
+                        <button onclick="setGridDensity('compact')" class="density-btn flex-1 py-1.5 rounded-lg text-xs font-medium hover:bg-bgCard">Compact (4-5 cols)</button>
+                        <button onclick="setGridDensity('normal')" class="density-btn active flex-1 py-1.5 rounded-lg text-xs font-medium bg-accent-500 text-white">Spaced (3-4 cols)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <button onclick="closeModal('settingsModal')" class="w-full bg-bgBorder hover:bg-accent-500 hover:text-white text-textMain font-semibold py-2.5 rounded-xl transition-all">
+                    Apply & Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DRAWER: SLIDE-OUT SHOPPING CART -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden transition-opacity">
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-bgCard border-l border-bgBorder shadow-2xl flex flex-col justify-between p-6 overflow-y-auto">
+            
+            <div>
+                <!-- Cart Header -->
+                <div class="flex items-center justify-between pb-4 border-b border-bgBorder">
+                    <h3 class="text-xl font-bold text-textMain flex items-center gap-2">
+                        <i class="fa-solid fa-cart-shopping text-accent-500"></i> Shopping Cart
+                    </h3>
+                    <button onclick="toggleCartDrawer()" class="text-textMuted hover:text-textMain text-lg"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <!-- Cart Item List -->
+                <div id="cartItemsContainer" class="py-4 space-y-4 max-h-[60vh] overflow-y-auto">
+                    <!-- Cart items populated via JS -->
+                </div>
+            </div>
+
+            <!-- Cart Footer & Total Calculation -->
+            <div class="border-t border-bgBorder pt-4 space-y-3">
+                <div class="space-y-1 text-xs">
+                    <div class="flex justify-between text-textMuted">
+                        <span>Subtotal</span>
+                        <span id="cartSubtotal" class="font-semibold text-textMain">$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-textMuted">
+                        <span>Buyer Protection Fee (3%)</span>
+                        <span id="cartFee" class="font-semibold text-textMain">$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-base font-bold text-textMain pt-2 border-t border-bgBorder/50">
+                        <span>Total Due</span>
+                        <span id="cartTotal" class="text-accent-500 font-extrabold">$0.00</span>
+                    </div>
+                </div>
+
+                <button onclick="openCheckoutModal()" id="checkoutBtn" disabled class="w-full bg-accent-500 hover:bg-accent-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+                    <span>Proceed to Checkout</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL 3: INTERACTIVE CHECKOUT & PAYMENT METHOD SELECTOR -->
+    <div id="checkoutModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-bgCard border border-bgBorder rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('checkoutModal')" class="absolute top-5 right-5 text-textMuted hover:text-textMain text-lg"><i class="fa-solid fa-xmark"></i></button>
+
+            <div class="mb-6">
+                <h3 class="text-2xl font-bold text-textMain flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-accent-500"></i> Nexus Secure Checkout
+                </h3>
+                <p class="text-xs text-textMuted mt-1">Select your payment method and complete your transaction.</p>
+            </div>
+
+            <!-- Order Summary Quick View -->
+            <div class="bg-bgMain p-4 rounded-2xl border border-bgBorder mb-6">
+                <div class="flex justify-between items-center text-xs text-textMuted mb-2">
+                    <span>Order Summary</span>
+                    <span id="checkoutItemCount">0 items</span>
+                </div>
+                <div class="text-2xl font-black text-accent-500" id="checkoutFinalTotal">$0.00</div>
+            </div>
+
+            <!-- PAYMENT OPTIONS GRID -->
+            <div class="space-y-4">
+                <label class="block text-xs font-bold text-textMain uppercase">Select Express Payment Option</label>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    
+                    <!-- Apple Pay -->
+                    <button onclick="selectPaymentMethod('Apple Pay', this)" class="payment-method-btn border-2 border-accent-500 bg-accent-500/10 p-3 rounded-2xl text-center flex flex-col items-center justify-center gap-1 transition-all">
+                        <i class="fa-brands fa-apple text-2xl text-textMain"></i>
+                        <span class="text-xs font-bold text-textMain">Apple Pay</span>
+                    </button>
+
+                    <!-- Google Pay -->
+                    <button onclick="selectPaymentMethod('Google Pay', this)" class="payment-method-btn border-2 border-bgBorder hover:border-accent-500 p-3 rounded-2xl text-center flex flex-col items-center justify-center gap-1 transition-all">
+                        <i class="fa-brands fa-google-pay text-2xl text-textMain"></i>
+                        <span class="text-xs font-bold text-textMain">Google Pay</span>
+                    </button>
+
+                    <!-- Amex -->
+                    <button onclick="selectPaymentMethod('American Express', this)" class="payment-method-btn border-2 border-bgBorder hover:border-accent-500 p-3 rounded-2xl text-center flex flex-col items-center justify-center gap-1 transition-all">
+                        <i class="fa-brands fa-cc-amex text-2xl text-blue-500"></i>
+                        <span class="text-xs font-bold text-textMain">Amex</span>
+                    </button>
+
+                    <!-- Mastercard -->
+                    <button onclick="selectPaymentMethod('Mastercard', this)" class="payment-method-btn border-2 border-bgBorder hover:border-accent-500 p-3 rounded-2xl text-center flex flex-col items-center justify-center gap-1 transition-all">
+                        <i class="fa-brands fa-cc-mastercard text-2xl text-orange-500"></i>
+                        <span class="text-xs font-bold text-textMain">Mastercard</span>
+                    </button>
+
+                    <!-- Visa -->
+                    <button onclick="selectPaymentMethod('Visa', this)" class="payment-method-btn border-2 border-bgBorder hover:border-accent-500 p-3 rounded-2xl text-center flex flex-col items-center justify-center gap-1 transition-all">
+                        <i class="fa-brands fa-cc-visa text-2xl text-blue-400"></i>
+                        <span class="text-xs font-bold text-textMain">Visa</span>
+                    </button>
+
+                    <!-- PayPal -->
+                    <button onclick="selectPaymentMethod('PayPal', this)" class="payment-method-btn border-2 border-bgBorder hover:border-accent-500 p-3 rounded-2xl text-center flex flex-col items-center justify-center gap-1 transition-all">
+                        <i class="fa-brands fa-cc-paypal text-2xl text-indigo-400"></i>
+                        <span class="text-xs font-bold text-textMain">PayPal</span>
+                    </button>
+                </div>
+
+                <!-- Shipping / Contact Quick Form -->
+                <div class="pt-4 space-y-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-textMuted mb-1">Shipping Address</label>
+                        <input type="text" placeholder="123 Tech Boulevard, Suite 400, Manteca, CA" class="w-full px-4 py-2 rounded-xl bg-bgMain border border-bgBorder text-textMain text-xs focus:ring-2 focus:ring-accent-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- Submit Payment Button -->
+                <button onclick="processOrder()" id="payConfirmBtn" class="w-full bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all mt-4">
+                    Pay with Apple Pay
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: ORDER SUCCESS CONFIRMATION -->
+    <div id="successModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-bgCard border border-bgBorder rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative">
+            <div class="w-16 h-16 bg-green-500/20 border border-green-500 text-green-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 class="text-2xl font-black text-textMain mb-1">Order Confirmed!</h3>
+            <p class="text-xs text-textMuted mb-4">Your order #NX-<span id="orderIdSpan">98341</span> has been placed successfully using <span id="confirmedMethodSpan" class="font-bold text-textMain">Apple Pay</span>.</p>
+            <div class="bg-bgMain p-3 rounded-xl border border-bgBorder text-xs text-left mb-6 space-y-1">
+                <div class="flex justify-between"><span class="text-textMuted">Seller Notification:</span> <span class="text-green-500 font-semibold">Sent</span></div>
+                <div class="flex justify-between"><span class="text-textMuted">Estimated Delivery:</span> <span class="text-textMain font-semibold">2-4 Business Days</span></div>
+            </div>
+            <button onclick="closeModal('successModal')" class="w-full bg-accent-500 hover:bg-accent-600 text-white font-bold py-2.5 rounded-xl transition-all">
+                Back to Marketplace
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        // SAMPLE INITIAL MARKETPLACE LISTINGS DATA
+        const initialProducts = [
+            {
+                id: 1,
+                title: "Apple MacBook Pro 14\" M1 Pro (16GB, 512GB SSD)",
+                category: "Electronics",
+                price: 1199.00,
+                condition: "Like New",
+                seller: "@tech_enthusiast",
+                rating: 4.9,
+                image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80",
+                description: "Barely used Space Gray MacBook Pro. Battery health is at 96%. Includes original charger and box.",
+                timestamp: Date.now() - 3600000 * 2
+            },
+            {
+                id: 2,
+                title: "Sony PlayStation 5 Console (Disc Edition)",
+                category: "Gaming",
+                price: 395.00,
+                condition: "Good",
+                seller: "@gamer_central",
+                rating: 4.8,
+                image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=600&q=80",
+                description: "Works perfectly! Includes DualSense controller and HDMI 2.1 cable.",
+                timestamp: Date.now() - 3600000 * 5
+            },
+            {
+                id: 3,
+                title: "Vintage Nike Air Jordan 1 Retro High 'Chicago'",
+                category: "Fashion",
+                price: 280.00,
+                condition: "Good",
+                seller: "@kicks_collector",
+                rating: 5.0,
+                image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=600&q=80",
+                description: "Authentic pre-loved Jordans. US Size 10. Minor creasing on toe box.",
+                timestamp: Date.now() - 3600000 * 8
+            },
+            {
+                id: 4,
+                title: "Herman Miller Aeron Ergonomic Chair (Medium)",
+                category: "Home",
+                price: 550.00,
+                condition: "Like New",
+                seller: "@office_gear",
+                rating: 4.7,
+                image: "https://images.unsplash.com/photo-1580481072645-022f9a6d83d0?auto=format&fit=crop&w=600&q=80",
+                description: "Fully loaded ergonomic chair with posture fit and lumbar support.",
+                timestamp: Date.now() - 3600000 * 12
+            },
+            {
+                id: 5,
+                title: "Canon EOS R6 Mirrorless Camera Body",
+                category: "Electronics",
+                price: 1350.00,
+                condition: "Like New",
+                seller: "@lens_master",
+                rating: 4.9,
+                image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80",
+                description: "Shutter count under 5,000. Super clean sensor, includes 2 extra batteries.",
+                timestamp: Date.now() - 3600000 * 24
+            },
+            {
+                id: 6,
+                title: "Nintendo Switch OLED Model - White",
+                category: "Gaming",
+                price: 240.00,
+                condition: "Good",
+                seller: "@retro_nintendo",
+                rating: 4.6,
+                image: "https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?auto=format&fit=crop&w=600&q=80",
+                description: "Vibrant OLED screen with screen protector applied since day one.",
+                timestamp: Date.now() - 3600000 * 30
+            },
+            {
+                id: 7,
+                title: "First Edition Hardcover Dune Novel (1965)",
+                category: "Books",
+                price: 450.00,
+                condition: "Fair",
+                seller: "@book_cellar",
+                rating: 5.0,
+                image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80",
+                description: "Rare vintage sci-fi book collectible. Dust jacket shows light shelf wear.",
+                timestamp: Date.now() - 3600000 * 48
+            },
+            {
+                id: 8,
+                title: "Bose QuietComfort 45 Wireless Noise Cancelling",
+                category: "Electronics",
+                price: 165.00,
+                condition: "Like New",
+                seller: "@audio_geek",
+                rating: 4.8,
+                image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=600&q=80",
+                description: "Triple black colorway. Crisp audio performance with active noise cancellation.",
+                timestamp: Date.now() - 3600000 * 60
+            }
+        ];
+
+        // GLOBAL APP STATE
+        let products = [...initialProducts];
+        let cart = [];
+        let currentCategory = 'All';
+        let searchQuery = '';
+        let selectedCondition = 'All';
+        let maxPriceFilter = 2500;
+        let selectedPaymentMethod = 'Apple Pay';
+
+        // ON PAGE LOAD INITIALIZATION
+        window.onload = function() {
+            renderListings();
+            updateCartUI();
+        };
+
+        // RENDER MARKETPLACE PRODUCTS GRID
+        function renderListings() {
+            const grid = document.getElementById('marketplaceGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            // Filter logic
+            let filtered = products.filter(item => {
+                const matchesCategory = (currentCategory === 'All') || (item.category === currentCategory);
+                const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      item.description.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesCondition = (selectedCondition === 'All') || (item.condition === selectedCondition);
+                const matchesPrice = item.price <= maxPriceFilter;
+
+                return matchesCategory && matchesSearch && matchesCondition && matchesPrice;
+            });
+
+            // Sorting logic
+            const sortBy = document.getElementById('sortBy').value;
+            if (sortBy === 'price-low') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (sortBy === 'price-high') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (sortBy === 'newest') {
+                filtered.sort((a, b) => b.timestamp - a.timestamp);
+            } else if (sortBy === 'popular') {
+                filtered.sort((a, b) => b.rating - a.rating);
+            }
+
+            // Update item count badge
+            document.getElementById('itemCountDisplay').innerText = `Showing ${filtered.length} of ${products.length} items`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            grid.innerHTML = filtered.map(item => `
+                <div class="card-element border rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+                    <div>
+                        <!-- Image & Badge Container -->
+                        <div class="relative h-48 w-full overflow-hidden bg-gray-900">
+                            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/1e293b/fff?text=Nexus+Listing'">
+                            <div class="absolute top-3 left-3 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-full border border-white/20">
+                                ${item.category}
+                            </div>
+                            <div class="absolute top-3 right-3 ${getConditionBadgeClass(item.condition)} text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-md">
+                                ${item.condition}
+                            </div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-4 space-y-2">
+                            <div class="flex items-center justify-between text-xs text-textMuted">
+                                <span><i class="fa-solid fa-user-check text-accent-500 mr-1"></i>${item.seller}</span>
+                                <span class="flex items-center text-amber-400 font-semibold"><i class="fa-solid fa-star mr-1"></i>${item.rating}</span>
+                            </div>
+
+                            <h3 class="font-bold text-sm text-textMain line-clamp-2 leading-snug group-hover:text-accent-500 transition-colors">
+                                ${item.title}
+                            </h3>
+
+                            <p class="text-xs text-textMuted line-clamp-2 leading-relaxed">
+                                ${item.description}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer: Price & Actions -->
+                    <div class="p-4 pt-0 flex items-center justify-between border-t border-bgBorder/40 mt-3">
+                        <div>
+                            <span class="text-xs text-textMuted block">Price</span>
+                            <span class="text-lg font-black text-textMain">$${item.price.toFixed(2)}</span>
+                        </div>
+
+                        <div class="flex gap-2">
+                            <button onclick="addToCart(${item.id})" class="p-2.5 rounded-xl bg-accent-500/10 hover:bg-accent-500 text-accent-500 hover:text-white transition-all" title="Add to Cart">
+                                <i class="fa-solid fa-cart-plus text-base"></i>
+                            </button>
+                            <button onclick="quickBuy(${item.id})" class="px-3 py-2 rounded-xl bg-accent-500 hover:bg-accent-600 text-white font-bold text-xs shadow-md transition-all active:scale-95">
+                                Buy Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // CONDITION BADGE COLOR HELPER
+        function getConditionBadgeClass(cond) {
+            if (cond === 'Like New') return 'bg-emerald-500 text-white';
+            if (cond === 'Good') return 'bg-blue-500 text-white';
+            return 'bg-amber-500 text-white';
+        }
+
+        // CATEGORY FILTERING
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('bg-accent-500', 'text-white', 'border-accent-500');
+                btn.classList.add('border-bgBorder', 'text-textMuted');
+            });
+            event.currentTarget.classList.add('bg-accent-500', 'text-white', 'border-accent-500');
+            event.currentTarget.classList.remove('border-bgBorder', 'text-textMuted');
+            
+            document.getElementById('sectionTitle').innerText = cat === 'All' ? 'Featured Marketplace Listings' : `${cat} Listings`;
+            renderListings();
+        }
+
+        // SEARCH INPUT HANDLER
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value;
+            renderListings();
+        }
+
+        // PRICE SLIDER LABEL UPDATE
+        function updatePriceLabel(val) {
+            document.getElementById('priceValue').innerText = `$${val}`;
+        }
+
+        // APPLY FILTERS (SLIDER & CONDITION)
+        function applyFilters() {
+            selectedCondition = document.getElementById('conditionFilter').value;
+            maxPriceFilter = parseFloat(document.getElementById('priceRange').value);
+            renderListings();
+        }
+
+        // RESET ALL FILTERS
+        function resetFilters() {
+            currentCategory = 'All';
+            searchQuery = '';
+            selectedCondition = 'All';
+            maxPriceFilter = 2500;
+            document.getElementById('searchInput').value = '';
+            document.getElementById('conditionFilter').value = 'All';
+            document.getElementById('priceRange').value = 2500;
+            document.getElementById('priceValue').innerText = '$2500';
+            renderListings();
+        }
+
+        // ADD ITEM TO SELL SUBMIT HANDLER
+        function handleSellSubmit(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('sellTitle').value;
+            const category = document.getElementById('sellCategory').value;
+            const condition = document.getElementById('sellCondition').value;
+            const price = parseFloat(document.getElementById('sellPrice').value);
+            const seller = document.getElementById('sellSeller').value || '@nexus_seller';
+            let image = document.getElementById('sellImage').value;
+            const description = document.getElementById('sellDescription').value;
+
+            // Default image fallback per category
+            if (!image) {
+                const fallbacks = {
+                    'Electronics': 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&w=600&q=80',
+                    'Gaming': 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80',
+                    'Fashion': 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=600&q=80',
+                    'Home': 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80',
+                    'Books': 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80',
+                    'Collectibles': 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80'
+                };
+                image = fallbacks[category] || 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&w=600&q=80';
+            }
+
+            const newItem = {
+                id: Date.now(),
+                title,
+                category,
+                price,
+                condition,
+                seller: seller.startsWith('@') ? seller : `@${seller}`,
+                rating: 5.0,
+                image,
+                description,
+                timestamp: Date.now()
+            };
+
+            products.unshift(newItem);
+            renderListings();
+            closeModal('sellModal');
+            document.getElementById('sellItemForm').reset();
+
+            // Highlight new listing notification
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-6 left-6 z-50 bg-accent-500 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 text-xs font-bold';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> Item "${title}" listed successfully!`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
+        }
+
+        // CART MANAGEMENT FUNCTIONS
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            
+            // Pulse Cart Badge
+            const badge = document.getElementById('cartBadge');
+            badge.classList.add('scale-125');
+            setTimeout(() => badge.classList.remove('scale-125'), 300);
+        }
+
+        function updateCartQuantity(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (!item) return;
+
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.id !== productId);
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cartItemsContainer');
+            const badge = document.getElementById('cartBadge');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+
+            const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
+            badge.innerText = totalItems;
+            if (totalItems > 0) {
+                badge.classList.remove('scale-0');
+            } else {
+                badge.classList.add('scale-0');
+            }
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-textMuted">
+                        <i class="fa-solid fa-cart-arrow-down text-4xl mb-3 opacity-40"></i>
+                        <p class="text-xs font-medium">Your marketplace cart is empty.</p>
+                    </div>
+                `;
+                checkoutBtn.disabled = true;
+            } else {
+                checkoutBtn.disabled = false;
+                container.innerHTML = cart.map(item => `
+                    <div class="flex items-center gap-3 p-3 bg-bgMain rounded-xl border border-bgBorder">
+                        <img src="${item.image}" class="w-14 h-14 object-cover rounded-lg">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs font-bold text-textMain truncate">${item.title}</h4>
+                            <div class="text-xs text-accent-500 font-extrabold mt-0.5">$${item.price.toFixed(2)}</div>
+                        </div>
+                        <div class="flex items-center gap-2 bg-bgCard border border-bgBorder px-2 py-1 rounded-lg">
+                            <button onclick="updateCartQuantity(${item.id}, -1)" class="text-textMuted hover:text-textMain text-xs px-1"><i class="fa-solid fa-minus"></i></button>
+                            <span class="text-xs font-bold text-textMain">${item.quantity}</span>
+                            <button onclick="updateCartQuantity(${item.id}, 1)" class="text-textMuted hover:text-textMain text-xs px-1"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Calculations
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const fee = subtotal * 0.03;
+            const total = subtotal + fee;
+
+            document.getElementById('cartSubtotal').innerText = `$${subtotal.toFixed(2)}`;
+            document.getElementById('cartFee').innerText = `$${fee.toFixed(2)}`;
+            document.getElementById('cartTotal').innerText = `$${total.toFixed(2)}`;
+        }
+
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cartDrawer');
+            drawer.classList.toggle('hidden');
+        }
+
+        function quickBuy(productId) {
+            addToCart(productId);
+            toggleCartDrawer();
+        }
+
+        // CHECKOUT & PAYMENT METHOD SELECTOR
+        function openCheckoutModal() {
+            toggleCartDrawer();
+            const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const total = subtotal * 1.03;
+
+            document.getElementById('checkoutItemCount').innerText = `${totalItems} item(s)`;
+            document.getElementById('checkoutFinalTotal').innerText = `$${total.toFixed(2)}`;
+            
+            openModal('checkoutModal');
+        }
+
+        function selectPaymentMethod(method, elem) {
+            selectedPaymentMethod = method;
+            document.querySelectorAll('.payment-method-btn').forEach(btn => {
+                btn.classList.remove('border-accent-500', 'bg-accent-500/10');
+                btn.classList.add('border-bgBorder');
+            });
+            elem.classList.remove('border-bgBorder');
+            elem.classList.add('border-accent-500', 'bg-accent-500/10');
+
+            document.getElementById('payConfirmBtn').innerText = `Pay with ${method}`;
+        }
+
+        function processOrder() {
+            closeModal('checkoutModal');
+            
+            // Set order confirmation details
+            document.getElementById('orderIdSpan').innerText = Math.floor(10000 + Math.random() * 90000);
+            document.getElementById('confirmedMethodSpan').innerText = selectedPaymentMethod;
+            
+            openModal('successModal');
+
+            // Clear Cart
+            cart = [];
+            updateCartUI();
+        }
+
+        // DESIGN SETTINGS & THEME CUSTOMIZATION LOGIC
+        function setTheme(themeName) {
+            document.documentElement.setAttribute('data-theme', themeName);
+            if (themeName === 'light') {
+                document.documentElement.classList.remove('dark');
+            } else {
+                document.documentElement.classList.add('dark');
+            }
+        }
+
+        function setFontSize(size) {
+            const body = document.body;
+            body.classList.remove('text-sm', 'text-base', 'text-lg');
+            if (size === 'sm') body.classList.add('text-sm');
+            if (size === 'base') body.classList.add('text-base');
+            if (size === 'lg') body.classList.add('text-lg');
+
+            document.querySelectorAll('.font-btn').forEach(btn => {
+                btn.classList.remove('bg-accent-500', 'text-white');
+            });
+            event.currentTarget.classList.add('bg-accent-500', 'text-white');
+        }
+
+        function setGridDensity(density) {
+            const grid = document.getElementById('marketplaceGrid');
+            grid.classList.remove('grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-4', 'lg:grid-cols-5');
+            
+            if (density === 'compact') {
+                grid.classList.add('grid-cols-2', 'sm:grid-cols-3', 'md:grid-cols-4', 'lg:grid-cols-5');
+            } else {
+                grid.classList.add('grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-4');
+            }
+
+            document.querySelectorAll('.density-btn').forEach(btn => {
+                btn.classList.remove('bg-accent-500', 'text-white');
+            });
+            event.currentTarget.classList.add('bg-accent-500', 'text-white');
+        }
+
+        // MODAL UTILITIES
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
